@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container col-md-4">
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <h2>Sign Up</h2>
+      {% for field in form %}
+        {% if field.errors %}
+          <ul class="errorlist">
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {{ field.label_tag }} <br /> {{ field }} <br /><br />
+      {% endfor %}
+      <p>
+        Already have an account? <a href="{% url 'core:login' %}" class="text-decoration-underline">Sign in</a> instead
+      </p>
+      <button type="submit" class="btn btn-primary my-1">Create</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container col-md-3">
+    <h2>Sign in</h2>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form action="{% url 'core:login' %}" method="post" class="">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="inputUsername" class="form-label">Username</label>
+        <input type="text" class="form-control" id="inputUsername" aria-describedby="username" name="username" />
+      </div>
+      <div class="mb-3">
+        <label for="password1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password1" name="password" />
+      </div>
+      <p>
+        Don&#39;t have an account? <a href="{% url 'core:register' %}" class="text-decoration-underline">Create one</a>
+      </p>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .star-rating {
+      direction: rtl;
+      display: inline-block;
+      padding: 20px;
+    }
+    .star-rating input[type='radio'] {
+      display: none;
+    }
+    .star-rating label {
+      font-size: 30px;
+      color: #ccc;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+    .star-rating input[type='radio']:checked ~ label {
+      color: #f5c518;
+    }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #f5c518;
+    }
+  </style>
+  <main class="container">
+    <a href="{% url 'home' %}">Back to book list</a>
+    <div class="container py-5">
+      <div class="row">
+        <div class="col">
+          <img src="{{ book.image_url }}" alt="" style="max-width: 250px; height: 100%; object-fit: cover;" />
+        </div>
+        <div class="col-7">
+          <p class="fs-4">{{ book.title }}</p>
+          {% for r in avg_rating %}
+            <span class="d-inline-block my-1">⭐</span>
+          {% endfor %}
+          <p class="fs-5">{{ book.author }}</p>
+          <p class="fs-6">{{ book.summary }}</p>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+    {% if not has_reviewed %}
+      <div class="row">
+        <div class="col-4 py-4" class="box-shadow">
+          <h5>Leave a review:</h5>
+          <form action="{% url 'book-detail' book.id %}" method="post">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+    <div class="py-4">
+      <h4 class="m-0">User Reviews</h4>
+      {% for review in book.review_set.all %}
+        <div class="py-4">
+          {% if request.user.username == review.user.username %}
+            <p class="mb-1">You</p>
+          {% else %}
+            <p class="mb-1">@{{ review.user.username }}</p>
+          {% endif %}
+          <p>{{ review.review_text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+{% endblock %}

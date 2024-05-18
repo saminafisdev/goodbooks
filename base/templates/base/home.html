@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="py-4">
+      <h4>Recommended for you ✨</h4>
+      {% if request.user.is_authenticated %}
+        <p class="loader-text text-center">Revving our recommendation engines</p>
+        <div class="loader my-4 mx-auto"></div>
+        <div id="recommender">
+          {% if recommended_books %}
+            <div class="book-listing">
+              {% for book in recommended_books %}
+                <div class="book">
+                  <img src="{{ book.image_url }}" alt="" />
+                  <div class="book-content">
+                    <h3>{{ book.title|title }}</h3>
+                    <h5>
+                      <span style="color: gray; font-size: 0.7rem">by</span>
+                      {{ book.author }}
+                    </h5>
+                    <p>{{ book.summary|truncatewords:20 }}</p>
+                  </div>
+                  <a href="{% url 'book-detail' book.id %}" class="btn btn-primary my-2 mx-2">View details</a>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <h5 class="text-secondary fs-6">Review books and we will add to your recommendations</h5>
+          {% endif %}
+        </div>
+      {% else %}
+        <p>
+          <a href="{% url 'core:login' %}" class="link-underline-primary">Log in</a> to manage your recommendations
+        </p>
+      {% endif %}
+    </div>
+    <div class="py-4">
+      <div class="container">
+        <div class="row">
+          <h4 class="col">Discover Books</h4>
+          <a href="#" class="col text-end">See all</a>
+        </div>
+      </div>
+      <div class="book-listing">
+        {% for book in books %}
+          <div class="book">
+            <img src="{{ book.image_url }}" alt="" />
+            <div class="book-content">
+              <h3>{{ book.title|title }}</h3>
+              <h5>
+                <span style="color: gray; font-size: 0.7rem">by</span>
+                {{ book.author }}
+              </h5>
+              <p>{{ book.summary|truncatewords:20 }}</p>
+            </div>
+            <a href="{% url 'book-detail' book.id %}" class="btn btn-primary my-2 mx-2">View details</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
